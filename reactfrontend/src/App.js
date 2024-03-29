@@ -8,9 +8,23 @@ const App = () => {
   const [newImage,setNewImage] = useState('');
   const [isValidUrl, setIsValidUrl] = useState(true);
 
+  
   const isValidImageUrl = (url) => {
-    const imageUrlRegex = /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i;
-    return imageUrlRegex.test(url);
+    // image file format : /\.(gif|jpe?g|tiff?|png|webp|bmp)$/i
+    // http with image format:  /^(https?:\/\/.*\.(jpeg|jpg|gif|png|webp|bmp)(\?.*)?)$/ 
+    // data image:  /^data:image\/(jpeg|jpg|gif|png|webp|bmp);base64$/
+    // https with tbn query image: /(&|\?)q=tbn.*/  
+    // https with search image query result : /(&|\?)q=.*/
+    if(url.match(/\.(gif|jpe?g|tiff?|png|webp|bmp)$/i) || 
+    url.match(/^(https?:\/\/.*\.(jpeg|jpg|gif|png|webp|bmp)(\?.*)?)$/) ||
+    url.match(/^data:image\/(jpeg|jpg|gif|png|webp|bmp);base64,/) ||
+    url.match(/(&|\?)q=tbn.*/) || 
+    url.match(/(&|\?)q=.*/))
+    {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   useEffect(()=> {
@@ -37,7 +51,7 @@ const App = () => {
       }
     } else {
       alert('Invalid image URL. Please enter a valid image URL.');
-    }
+    } 
   };
 
   const handleFavorite = async(id) => {
@@ -70,16 +84,20 @@ const App = () => {
         onChange={(e) =>  {
           const inputValue = e.target.value;
           setNewImage(inputValue);
-          setIsValidUrl(isValidImageUrl(inputValue));
+          setIsValidUrl(isValidImageUrl(inputValue)); 
         }}
-        style={{ border: isValidUrl ? '1px solid black' : '1px solid red' }}>
+      >
         </input><span>    </span>
         <button onClick={handleAddImage} disabled={!newImage}>Add Image</button>
+        {!isValidUrl && newImage.trim() !== '' && (
+          <span style={{ color: 'red' }}>  Invalid image URL. Please enter a valid image URL.</span>
+        )}
+
         <ul>
           {
             images.map((image) => (
             <li key={image.id}>
-              <img src={image.url} alt="" style={{ width: '200px', height: '200px' }}/>
+              <img src={image.url} alt={image.url!=='' ? "Uploaded" : ""} style={{ width: '200px', height: '200px' }}/>
               <button onClick={()=>handleFavorite(image.id)}>Favorite Image</button>
               <button onClick={()=>handleDelete(image.id)}>Delete Image</button>
             </li>
