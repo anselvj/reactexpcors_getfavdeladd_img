@@ -58,7 +58,6 @@ const App = () => {
     try {
       await axios.patch(`http://localhost:5000/images/${id}/favorite`);
       fetchImages();
-      console.log('test favorite:',id);
     } catch(error) {
       console.error('Error favoriting image:',error);
     }
@@ -68,7 +67,6 @@ const App = () => {
     try {
       await axios.delete(`http://localhost:5000/images/${id}`);
       fetchImages();
-      console.log('test delete:',id);
     } catch(error) {
       console.error('Error deleting image:',error);
     }
