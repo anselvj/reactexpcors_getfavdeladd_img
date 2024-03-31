@@ -10,22 +10,15 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
 /*
-const corsOption = {
-    origin: 'http://localhost:3000',
-    credentials: true,
-    optionSuccessStatus: 200
-};
-
-app.use(cors({corsOption}));
-*/
-
 const corsOption =  {
     origin: '*',
     credentials: true,
     optionSuccessStatus: 200
 };
 
-app.use(cors(corsOption));
+app.use(cors(corsOption)); */
+// Enable CORS for all origins
+app.use(cors());
 
 app.use((req,rep, next) => {
     //set middleware logic
