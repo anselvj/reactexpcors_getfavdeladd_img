@@ -34,7 +34,11 @@ const App = () => {
   const fetchImages = async() => {
     try {
       const response = await axios.get('http://localhost:5000/images');
-      setImages(response.data);
+      if(response && response.data !== undefined) {
+          setImages(response.data);
+      } else {
+        console.error('Error fetching image: Response data is undefined');
+      }
     } catch(error) {
       console.error('Error fetching image:',error);
     }
@@ -56,8 +60,12 @@ const App = () => {
 
   const handleFavorite = async(id) => {
     try {
-      await axios.patch(`http://localhost:5000/images/${id}/favorite`);
-      fetchImages();
+      const response = await axios.patch(`http://localhost:5000/images/${id}/favorite`);
+      if(response && response.data !== undefined) {
+          fetchImages();
+      } else {
+        console.error('Error favoriting image: Response data is undefined');
+      }
     } catch(error) {
       console.error('Error favoriting image:',error);
     }
@@ -65,8 +73,13 @@ const App = () => {
 
   const handleDelete = async(id) => {
     try {
-      await axios.delete(`http://localhost:5000/images/${id}`);
-      fetchImages();
+      const response = await axios.delete(`http://localhost:5000/images/${id}`);
+      if(response && response.data !== undefined) {
+          fetchImages();
+      } else {
+        console.error('Error deleting image: Response data is undefined');
+      }
+
     } catch(error) {
       console.error('Error deleting image:',error);
     }
